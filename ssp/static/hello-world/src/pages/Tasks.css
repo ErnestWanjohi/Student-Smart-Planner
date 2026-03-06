@@ -1,0 +1,71 @@
+/* Container for all tasks */
+.tasks-container {
+  margin-top: 20px;
+}
+
+/* Individual task card */
+.task-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #f5f5f5;
+  padding: 10px 15px;
+  margin-bottom: 8px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.2s ease;
+}
+
+.task-item:hover {
+  background-color: #e0e0e0;
+}
+
+/* Task title styling */
+.task-title {
+  font-size: 16px;
+}
+
+/* Completed tasks */
+.task-title.completed {
+  text-decoration: line-through;
+  color: #888;
+}
+
+/* Buttons container */
+.task-buttons button {
+  margin-left: 8px;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s ease;
+}
+
+/* Toggle button */
+.toggle-btn {
+  background-color: #4caf50;
+  color: white;
+}
+
+.toggle-btn:hover {
+  background-color: #45a049;
+}
+
+/* Delete button */
+.delete-btn {
+  background-color: #f44336;
+  color: white;
+}
+
+.delete-btn:hover {
+  background-color: #d32f2f;
+}
+
+/* Message when no tasks exist */
+.no-tasks {
+  text-align: center;
+  color: #666;
+  font-style: italic;
+  margin-top: 10px;
+}

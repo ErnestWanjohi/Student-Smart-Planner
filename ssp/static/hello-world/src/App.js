@@ -7,29 +7,25 @@ import Dashboard from "./pages/Dashboard";
 function App() {
   const [tasks, setTasks] = useState([]);
 
-  // Load tasks from backend
   useEffect(() => {
     const fetchTasks = async () => {
-      const storedTasks = await invoke("getTasks");
+      const storedTasks = await invoke("getTasks"); // only getTasks
       setTasks(storedTasks || []);
     };
     fetchTasks();
   }, []);
 
-  // Save tasks helper
   const saveTasks = async (updatedTasks) => {
     setTasks(updatedTasks);
     await invoke("saveTasks", { tasks: updatedTasks });
   };
 
-  // Add task
   const addTask = async (title) => {
     if (!title) return;
     const newTask = { id: Date.now(), title, completed: false };
     await saveTasks([...tasks, newTask]);
   };
 
-  // Toggle completed
   const toggleTask = async (id) => {
     const updatedTasks = tasks.map((t) =>
       t.id === id ? { ...t, completed: !t.completed } : t
@@ -37,7 +33,6 @@ function App() {
     await saveTasks(updatedTasks);
   };
 
-  // Delete with confirmation
   const deleteTask = async (id) => {
     const task = tasks.find((t) => t.id === id);
     if (!task) return;
