@@ -1,0 +1,26 @@
+app:
+  id: ari:cloud:ecosystem::app/b23212a8-1dbe-42d3-a3ac-27f23c2f9d26
+  runtime:
+    name: nodejs24.x
+    memoryMB: 256
+    architecture: arm64
+
+permissions:
+  scopes:
+    - storage:app
+
+modules:
+  jira:projectPage:
+    - key: ssp-hello-world-project-page
+      title: ssp
+      resource: main
+      resolver:
+        function: resolver
+
+  function:
+    - key: resolver
+      handler: index.handler
+
+resources:
+  - key: main
+    path: static/hello-world/build
