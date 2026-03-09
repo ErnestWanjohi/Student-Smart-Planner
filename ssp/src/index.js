@@ -11,12 +11,12 @@ resolver.define("getTasks", async () => {
 });
 
 // Save tasks
-resolver.define("saveTasks", async ({ tasks }) => {
-  await kvs.set(STORAGE_KEY, tasks);
-  return tasks;
+resolver.define("saveTasks", async ({ payload }) => {
+  await kvs.set(STORAGE_KEY, payload.tasks);
+  return payload.tasks;
 });
 
-// Optional: temporary getText for old frontend calls
+// Optional: temporary resolver
 resolver.define("getText", async () => {
   return "Hello from backend!";
 });

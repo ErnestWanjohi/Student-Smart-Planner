@@ -9,12 +9,17 @@ function App() {
   const [tasks, setTasks] = useState([]);
   const [modal, setModal] = useState({ show: false, taskId: null });
 
-  // Load tasks from backend
+  // Load tasks from backend when app loads
   useEffect(() => {
     const fetchTasks = async () => {
-      const storedTasks = await invoke("getTasks");
-      setTasks(storedTasks || []);
+      try {
+        const storedTasks = await invoke("getTasks");
+        setTasks(storedTasks || []);
+      } catch (error) {
+        console.error("Error loading tasks:", error);
+      }
     };
+
     fetchTasks();
   }, []);
 
@@ -26,50 +31,66 @@ function App() {
 
   // Add task
   const addTask = async (title) => {
-    if (!title) return;
-    const newTask = { id: Date.now(), title, completed: false };
-    await saveTasks([...tasks, newTask]);
-  };
+    if (!title.trim()) return;
 
-  // Toggle completed
-  const toggleTask = async (id) => {
-    const updatedTasks = tasks.map((t) =>
-      t.id === id ? { ...t, completed: !t.completed } : t
-    );
+    const newTask = {
+      id: Date.now(),
+      title,
+      completed: false
+    };
+
+    const updatedTasks = [...tasks, newTask];
     await saveTasks(updatedTasks);
   };
 
-const deleteTask = (id) => {
-  setModal({ show: true, taskId: id });
-};
+  // Toggle task completion
+  const toggleTask = async (id) => {
+    const updatedTasks = tasks.map((task) =>
+      task.id === id ? { ...task, completed: !task.completed } : task
+    );
 
-const handleConfirmDelete = async () => {
-  // Hide the modal immediately
-  setModal({ show: false, taskId: null });
+    await saveTasks(updatedTasks);
+  };
 
-  // Then delete the task asynchronously
-  const updatedTasks = tasks.filter((t) => t.id !== modal.taskId);
-  await saveTasks(updatedTasks);
-};
+  // Show delete modal
+  const deleteTask = (id) => {
+    setModal({ show: true, taskId: id });
+  };
 
-const handleCancelDelete = () => {
-  setModal({ show: false, taskId: null });
-};
+  // Confirm delete
+  const handleConfirmDelete = async () => {
+    const taskId = modal.taskId;
+
+    const updatedTasks = tasks.filter((task) => task.id !== taskId);
+
+    await saveTasks(updatedTasks);
+
+    setModal({ show: false, taskId: null });
+  };
+
+  // Cancel delete
+  const handleCancelDelete = () => {
+    setModal({ show: false, taskId: null });
+  };
 
   return (
     <div className="container">
       <h1>Student Smart Planner</h1>
 
-      {/* Add task form */}
+      {/* Add Task */}
       <AddTask addTask={addTask} />
 
-      {/* Task list */}
-      <Tasks tasks={tasks} toggleTask={toggleTask} deleteTask={deleteTask} />
+      {/* Task List */}
+      <Tasks
+        tasks={tasks}
+        toggleTask={toggleTask}
+        deleteTask={deleteTask}
+      />
 
-      {/* Dashboard summary */}
+      {/* Dashboard */}
       <Dashboard tasks={tasks} />
 
-      {/* Delete confirmation modal */}
+      {/* Confirmation Modal */}
       <Modal
         show={modal.show}
         title="Delete Task"
